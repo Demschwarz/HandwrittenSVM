@@ -71,7 +71,14 @@ public enum MLSandboxDatasets {
     MUSHROOMS("examples/src/main/resources/datasets/mushrooms.csv", true, ","),
 
     /** A dataset with categorical features and labels. */
-    AMAZON_EMPLOYEE_ACCESS("examples/src/main/resources/datasets/amazon-employee-access-challenge_train.csv", true, ",");
+    AMAZON_EMPLOYEE_ACCESS("examples/src/main/resources/datasets/amazon-employee-access-challenge_train.csv", true, ","),
+    MNIST_TRAIN("src/main/java/dataFiles/mnist_train.csv", true, ","),
+    MNIST_TEST("src/main/java/dataFiles/mnist_test.csv", true, ","),
+    MNIST_TRAIN_5("src/main/java/dataFiles/mnist_train_5.csv", true, ","),
+    MNIST_TRAIN_8("src/main/java/dataFiles/mnist_train_8.csv", true, ","),
+    MNIST_TRAIN_10("src/main/java/dataFiles/mnist_train_10.csv", true, ","),
+    MNIST_TRAIN_12("src/main/java/dataFiles/mnist_train_12.csv", true, ","),
+    MNIST_TRAIN_15("src/main/java/dataFiles/mnist_train_15.csv", true, ",");
 
     /** Filename. */
     private final String filename;
