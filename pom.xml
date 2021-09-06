@@ -14,6 +14,17 @@
         <entryClass>OneVsRestClassificationExample</entryClass>
     </properties>
 
+	<repositories>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>Maven Repository Switchboard</name>
+			<url>https://repo1.maven.org/maven2</url>
+		</repository>
+	</repositories>
+	
     <!-- https://mvnrepository.com/artifact/org.apache.ignite/ignite-core -->
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
