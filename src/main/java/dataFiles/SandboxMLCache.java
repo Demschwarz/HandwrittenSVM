@@ -126,19 +126,21 @@ public class SandboxMLCache {
             double[] data = new double[cells.length];
             NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
 
-            for (int i = 0; i < cells.length; i++)
-                try {
-                    if (cells[i].isEmpty()) data[i] = Double.NaN;
-                    else data[i] = Double.valueOf(cells[i]);
-                } catch (NumberFormatException e) {
+            if (cells[0].equals("1") || cells[0].equals("0")) {
+                for (int i = 0; i < cells.length; i++)
                     try {
-                        data[i] = format.parse(cells[i]).doubleValue();
+                        if (cells[i].isEmpty()) data[i] = Double.NaN;
+                        else data[i] = Double.valueOf(cells[i]);
+                    } catch (NumberFormatException e) {
+                        try {
+                            data[i] = format.parse(cells[i]).doubleValue();
+                        }
+                        catch (ParseException e1) {
+                            throw new FileParsingException(cells[i], i, Paths.get(dataset.getFileName()));
+                        }
                     }
-                    catch (ParseException e1) {
-                        throw new FileParsingException(cells[i], i, Paths.get(dataset.getFileName()));
-                    }
-                }
-            cache.put(cnt++, VectorUtils.of(data));
+                cache.put(cnt++, VectorUtils.of(data));
+            }
         }
         return cache;
     }

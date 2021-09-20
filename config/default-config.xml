@@ -44,7 +44,6 @@
                             <list>
                                 <!-- In distributed environment, replace with actual host IP address. -->
                                 <value>10.0.0.1:47500..47509</value>
-                                <value>10.0.0.2:47500..47509</value>
                             </list>
                         </property>
                     </bean>

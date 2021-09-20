@@ -17,26 +17,19 @@
 
 //package org.apache.ignite.examples.ml.multiclass;
 
-import java.io.IOException;
-import java.util.Arrays;
-import javax.cache.Cache;
-
-import org.apache.commons.math3.util.Precision;
+import dataFiles.MLSandboxDatasets;
+import dataFiles.SandboxMLCache;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.Ignition;
-import org.apache.ignite.cache.query.QueryCursor;
-import org.apache.ignite.cache.query.ScanQuery;
-import dataFiles.MLSandboxDatasets;
-import dataFiles.SandboxMLCache;
+import org.apache.ignite.ml.dataset.feature.extractor.Vectorizer;
 import org.apache.ignite.ml.dataset.feature.extractor.impl.DummyVectorizer;
 import org.apache.ignite.ml.math.primitives.vector.Vector;
-import org.apache.ignite.ml.multiclass.MultiClassModel;
 import org.apache.ignite.ml.multiclass.OneVsRestTrainer;
-import org.apache.ignite.ml.preprocessing.Preprocessor;
-import org.apache.ignite.ml.preprocessing.minmaxscaling.MinMaxScalerTrainer;
 import org.apache.ignite.ml.svm.SVMLinearClassificationModel;
 import org.apache.ignite.ml.svm.SVMLinearClassificationTrainer;
+
+import java.io.IOException;
 
 /**
  * Run One-vs-Rest multi-class classification trainer ({@link OneVsRestTrainer}) parametrized by binary SVM classifier
@@ -76,28 +69,27 @@ public class OneVsRestClassificationExample {
 //                dataCache = new SandboxMLCache(ignite).fillCacheWith(MLSandboxDatasets.MNIST_TRAIN_8);
 //                dataCache = new SandboxMLCache(ignite).fillCacheWith(MLSandboxDatasets.MNIST_TRAIN_10);
 //                dataCache = new SandboxMLCache(ignite).fillCacheWith(MLSandboxDatasets.MNIST_TRAIN_12);
-                dataCache = new SandboxMLCache(ignite).fillCacheWith(MLSandboxDatasets.MNIST_TRAIN_15);
+                dataCache = new SandboxMLCache(ignite).fillCacheWith(MLSandboxDatasets.MNIST_TRAIN);
                 System.out.println("complete, dataCache.size() = " + dataCache.size() + ", time = " + (System.currentTimeMillis() - time) / 1000.0);
 
                 time = System.currentTimeMillis();
-                OneVsRestTrainer<SVMLinearClassificationModel> trainer
-                        = new OneVsRestTrainer<>(new SVMLinearClassificationTrainer()
-                        .withAmountOfIterations(20)
-                        .withAmountOfLocIterations(50)
-                        .withLambda(0.2)
-                        .withSeed(1234L)
-                );
+                SVMLinearClassificationTrainer trainer = new SVMLinearClassificationTrainer();
 
+                Vectorizer<Integer, Vector, Integer, Double> vectorizer = new DummyVectorizer<Integer>()
+                        .labeled(Vectorizer.LabelCoordinate.FIRST);
                 System.out.print("Start mdl trainer.fit .. ");
-                MultiClassModel<SVMLinearClassificationModel> mdl = trainer.fit(
+                SVMLinearClassificationModel mdl = trainer.fit(
                         ignite,
                         dataCache,
-                        new DummyVectorizer<Integer>().labeled(0)
+                        vectorizer
                 );
                 System.out.println("complete, time = " + (System.currentTimeMillis() - time) / 1000.0);
+            } catch (Exception ex) {
+                ex.printStackTrace();
             } finally {
-                if (dataCache != null)
-                    dataCache.destroy();
+                System.out.println("cache name = " + dataCache.getName());
+//                if (dataCache != null)
+//                    dataCache.destroy();
             }
         } finally {
             System.out.flush();
